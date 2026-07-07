@@ -1,0 +1,199 @@
+/* =====================================================
+   RESPONSIVE.CSS — All breakpoints
+   ===================================================== */
+
+/* ---- Base: Mobile First (320px+) ---- */
+.scene { padding: 3rem 1.25rem; }
+
+.monogram__letter { font-size: 5rem; }
+.monogram__amp    { font-size: 2.5rem; }
+
+.date-card { padding: 1.5rem 1.25rem; }
+.date-display { flex-direction: column; gap: 0.5rem; }
+.date-meta { text-align: center; }
+
+.rsvp-form { padding: 1.5rem 1.25rem; }
+
+.venue-card { padding: 1.5rem 1.25rem; }
+
+.countdown { gap: 0.75rem; }
+.countdown__ring { width: 70px; height: 70px; }
+.countdown__number { font-size: 1.3rem; }
+.countdown__label { font-size: 0.55rem; letter-spacing: 2px; }
+
+.botanical { max-width: 100px; opacity: 0.6; }
+
+.corner-ornament { width: 70px; height: 70px; }
+
+.music-btn { width: 42px; height: 42px; }
+.music-control { top: 1rem; right: 1rem; }
+
+/* ---- Small Mobile (360px+) ---- */
+@media (min-width: 360px) {
+  .monogram__letter { font-size: 5.5rem; }
+  .countdown__ring  { width: 72px; height: 72px; }
+}
+
+/* ---- Standard Mobile (480px) ---- */
+@media (min-width: 480px) {
+  .scene { padding: 3.5rem 2rem; }
+  .monogram__letter { font-size: 6.5rem; }
+  .monogram__amp    { font-size: 3rem; }
+  .date-display { flex-direction: row; gap: 1rem; }
+  .date-meta    { text-align: left; }
+  .date-card    { padding: 2rem 2.5rem; }
+  .rsvp-form    { padding: 2rem 2.5rem; }
+  .venue-card   { padding: 2rem 2.5rem; }
+  .botanical    { max-width: 120px; opacity: 0.75; }
+  .corner-ornament { width: 90px; height: 90px; }
+  .countdown    { gap: 1.25rem; }
+  .countdown__ring { width: 76px; height: 76px; }
+}
+
+/* ---- Large Mobile / Portrait Tablet (600px) ---- */
+@media (min-width: 600px) {
+  .scene    { padding: 4rem 2.5rem; }
+  .monogram__letter { font-size: 7.5rem; }
+  .botanical  { max-width: 140px; }
+  .countdown  { gap: 1.5rem; }
+  .countdown__ring  { width: 80px; height: 80px; }
+  .countdown__label { font-size: 0.6rem; }
+}
+
+/* ---- Tablet (768px) ---- */
+@media (min-width: 768px) {
+  .scene { padding: 5rem 3rem; }
+
+  .monogram__letter { font-size: 9rem; }
+  .monogram__amp    { font-size: 3.5rem; }
+
+  .botanical    { max-width: 160px; opacity: 0.85; }
+  .corner-ornament { width: 110px; height: 110px; }
+
+  .date-card  { padding: 2.5rem 3.5rem; }
+  .date-day   { font-size: 5.5rem; }
+  .date-month { font-size: 1.7rem; }
+
+  .venue-card { padding: 2.5rem 3.5rem; }
+  .venue-name { font-size: 2rem; }
+
+  .rsvp-form  { padding: 2.5rem 3.5rem; }
+  .rsvp-form__field { display: flex; flex-direction: column; }
+
+  .countdown { gap: 2rem; }
+  .countdown__ring  { width: 90px; height: 90px; }
+  .countdown__number { font-size: 2rem; }
+  .countdown__label { font-size: 0.65rem; letter-spacing: 3px; }
+
+  .names-block .name {
+    font-size: clamp(5rem, 12vw, 8rem);
+  }
+}
+
+/* ---- Small Desktop (1024px) ---- */
+@media (min-width: 1024px) {
+  .scene { padding: 6rem 4rem; }
+  .scene-content { max-width: 680px; }
+
+  .monogram__letter { font-size: 10rem; }
+  .botanical    { max-width: 180px; }
+  .corner-ornament { width: 120px; height: 120px; }
+
+  .countdown { gap: 2.5rem; }
+  .countdown__ring { width: 100px; height: 100px; }
+  .countdown__number { font-size: 2.2rem; }
+  .countdown__label { font-size: 0.7rem; }
+
+  .names-block .name { font-size: clamp(6rem, 11vw, 9rem); }
+
+  .music-btn { width: 52px; height: 52px; }
+
+  .rsvp-form { padding: 3rem 4rem; }
+}
+
+/* ---- Full Desktop (1280px+) ---- */
+@media (min-width: 1280px) {
+  .scene { padding: 7rem 5rem; }
+  .scene-content { max-width: 720px; }
+
+  .monogram__letter { font-size: 11rem; }
+  .monogram__amp    { font-size: 4rem; }
+
+  .botanical    { max-width: 200px; }
+  .date-card    { padding: 3rem 5rem; }
+  .venue-card   { padding: 3rem 5rem; }
+  .rsvp-form    { padding: 3rem 5rem; }
+
+  .countdown { gap: 3rem; }
+  .countdown__ring  { width: 110px; height: 110px; }
+  .countdown__number { font-size: 2.5rem; }
+
+  .names-block .name { font-size: 10rem; }
+}
+
+/* ---- Instagram Reel / TikTok Portrait (390 x 844) ---- */
+@media (max-width: 430px) and (min-height: 700px) {
+  .scene { min-height: 100svh; justify-content: center; }
+  .monogram__letter { font-size: 5.5rem; }
+  .botanical { max-width: 90px; opacity: 0.5; }
+  .countdown { gap: 0.6rem; }
+  .countdown__ring { width: 68px; height: 68px; }
+  .countdown__number { font-size: 1.2rem; }
+  .countdown__label { font-size: 0.5rem; letter-spacing: 1.5px; }
+  .date-display { flex-direction: column; align-items: center; gap: 0.25rem; }
+  .date-meta { text-align: center; }
+  .date-day { font-size: 4rem; }
+  .rsvp-form { padding: 1.25rem 1rem; }
+}
+
+/* ---- Landscape Mobile ---- */
+@media (max-height: 500px) and (orientation: landscape) {
+  .scene { min-height: auto; padding: 3rem 2rem; }
+  .monogram__letter { font-size: 4rem; }
+  .monogram__amp    { font-size: 1.8rem; }
+  .names-block .name { font-size: 3.5rem; }
+  .countdown__ring  { width: 60px; height: 60px; }
+  .countdown__number { font-size: 1.1rem; }
+  .scroll-cta { bottom: 1rem; }
+}
+
+/* ---- Widescreen / 4K ---- */
+@media (min-width: 1920px) {
+  .scene-content { max-width: 840px; }
+  .monogram__letter { font-size: 13rem; }
+  .names-block .name { font-size: 12rem; }
+  .botanical { max-width: 250px; }
+}
+
+/* ---- Print ---- */
+@media print {
+  #particleCanvas,
+  .music-control,
+  .scroll-progress,
+  .blur-orb,
+  .scroll-cta { display: none !important; }
+
+  .scene {
+    page-break-inside: avoid;
+    background: white !important;
+    color: black !important;
+    min-height: auto;
+  }
+
+  .shimmer-text,
+  .monogram__letter,
+  .name {
+    -webkit-text-fill-color: #8B6914 !important;
+    background: none !important;
+  }
+}
+
+/* ---- High Contrast ---- */
+@media (prefers-contrast: high) {
+  :root {
+    --color-text-muted: rgba(250,246,240,0.8);
+    --glass-border:     rgba(201,169,110,0.6);
+  }
+  .eyebrow { color: var(--color-gold-light); }
+  .rsvp-input { border-color: var(--color-gold); }
+}

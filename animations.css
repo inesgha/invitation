@@ -1,0 +1,357 @@
+/* =====================================================
+   ANIMATIONS.CSS — All keyframes and motion effects
+   ===================================================== */
+
+/* ---- Fade Animations ---- */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeDown {
+  from { opacity: 0; transform: translateY(-24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeLeft {
+  from { opacity: 0; transform: translateX(24px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes fadeRight {
+  from { opacity: 0; transform: translateX(-24px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ---- Zoom ---- */
+@keyframes zoomIn {
+  from { opacity: 0; transform: scale(0.85); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes zoomOut {
+  from { opacity: 1; transform: scale(1); }
+  to   { opacity: 0; transform: scale(1.1); }
+}
+
+@keyframes zoomInSlow {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+/* ---- Float ---- */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-10px); }
+}
+
+@keyframes floatSlow {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  33%       { transform: translateY(-8px) rotate(2deg); }
+  66%       { transform: translateY(-4px) rotate(-1deg); }
+}
+
+/* ---- Rotate ---- */
+@keyframes rotateSlow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes rotateSlowReverse {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(-360deg); }
+}
+
+/* ---- Petal Fall ---- */
+@keyframes petalFall {
+  0%   { transform: translateY(-20px) rotate(0deg) translateX(0);   opacity: 0; }
+  10%  { opacity: 0.8; }
+  90%  { opacity: 0.6; }
+  100% { transform: translateY(110vh) rotate(720deg) translateX(60px); opacity: 0; }
+}
+
+@keyframes petalSway {
+  0%,100% { margin-left: 0; }
+  25%     { margin-left: 20px; }
+  75%     { margin-left: -20px; }
+}
+
+/* ---- Gold Shimmer ---- */
+@keyframes goldShimmer {
+  0%   { background-position: 0% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes shimmerSweep {
+  0%   { left: -100%; }
+  100% { left: 200%; }
+}
+
+/* ---- Light Animations ---- */
+@keyframes lightSweep {
+  0%   { transform: translateX(-100%) skewX(-20deg); opacity: 0; }
+  20%  { opacity: 0.4; }
+  80%  { opacity: 0.4; }
+  100% { transform: translateX(300%) skewX(-20deg); opacity: 0; }
+}
+
+@keyframes lightBurst {
+  0%   { box-shadow: 0 0 60px 30px rgba(201,169,110,0.08), 0 0 120px 60px rgba(201,169,110,0.04); }
+  100% { box-shadow: 0 0 80px 40px rgba(201,169,110,0.14), 0 0 160px 80px rgba(201,169,110,0.07); }
+}
+
+/* ---- Blur Pulse ---- */
+@keyframes blurPulse {
+  0%,100% { transform: translate(-50%,-50%) scale(1);   opacity: 0.6; }
+  50%     { transform: translate(-50%,-50%) scale(1.15); opacity: 1; }
+}
+
+/* ---- Glow ---- */
+@keyframes glow {
+  0%,100% { filter: drop-shadow(0 0 10px rgba(201,169,110,0.3)); }
+  50%     { filter: drop-shadow(0 0 30px rgba(201,169,110,0.7)); }
+}
+
+@keyframes glowPulse {
+  0%,100% { transform: translate(-50%,-50%) scale(1);   opacity: 0.4; border-color: rgba(201,169,110,0.08); }
+  50%     { transform: translate(-50%,-50%) scale(1.08); opacity: 0.8; border-color: rgba(201,169,110,0.2); }
+}
+
+/* ---- Typewriter ---- */
+@keyframes typewriter {
+  from { width: 0; }
+  to   { width: 100%; }
+}
+
+@keyframes blinkCursor {
+  0%,100% { border-right-color: var(--color-gold); }
+  50%     { border-right-color: transparent; }
+}
+
+/* ---- Letter Spacing ---- */
+@keyframes letterSpacing {
+  from { letter-spacing: -0.5em; opacity: 0; }
+  to   { letter-spacing: normal; opacity: 1; }
+}
+
+@keyframes letterSpacingGold {
+  from { letter-spacing: -0.3em; opacity: 0; }
+  to   { letter-spacing: 0.05em; opacity: 1; }
+}
+
+/* ---- Draw Line ---- */
+@keyframes drawLine {
+  from { stroke-dashoffset: 200; }
+  to   { stroke-dashoffset: 0; }
+}
+
+/* ---- Path Draw ---- */
+@keyframes pathDraw {
+  from { stroke-dashoffset: 1000; opacity: 0; }
+  to   { stroke-dashoffset: 0; opacity: 1; }
+}
+
+/* ---- Bloom (SVG Flowers) ---- */
+@keyframes bloom {
+  from { transform: scale(0) rotate(-180deg); opacity: 0; }
+  to   { transform: scale(1) rotate(0deg);   opacity: 1; }
+}
+
+@keyframes leafUnfurl {
+  from { transform: scale(0.2) rotate(-45deg); opacity: 0; transform-origin: bottom center; }
+  to   { transform: scale(1) rotate(0deg); opacity: 1; transform-origin: bottom center; }
+}
+
+/* ---- Scroll Bounce ---- */
+@keyframes scrollBounce {
+  0%,100% { transform: translateY(0); }
+  50%     { transform: translateY(6px); }
+}
+
+/* ---- Music Pulse ---- */
+@keyframes musicPulse {
+  0%   { transform: scale(1);   opacity: 0.6; }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+
+/* ---- Heart Float ---- */
+@keyframes heartFloat {
+  0%   { transform: translateY(0) scale(1);    opacity: 0; }
+  15%  { opacity: 0.8; }
+  85%  { opacity: 0.6; }
+  100% { transform: translateY(-120px) scale(0.5); opacity: 0; }
+}
+
+/* ---- Ripple ---- */
+@keyframes ripple {
+  0%   { width: 0;    height: 0;   opacity: 0.5; }
+  100% { width: 300px; height: 300px; opacity: 0; }
+}
+
+/* ---- Shimmer Bar ---- */
+@keyframes shimmerBar {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* ---- Countdown Tick ---- */
+@keyframes countdownTick {
+  0%   { transform: scale(1); }
+  30%  { transform: scale(1.12); }
+  100% { transform: scale(1); }
+}
+
+/* ---- Ornament Path ---- */
+.ornament-path {
+  stroke-dasharray: 200;
+  stroke-dashoffset: 200;
+  animation: pathDraw 2s var(--ease-expo) 1.5s forwards;
+}
+
+/* ---- SVG Flower ---- */
+.svg-flower {
+  animation: bloom 1s var(--ease-bounce) 2s both;
+  transform-origin: center;
+}
+
+/* ---- Leaf ---- */
+.leaf {
+  animation: leafUnfurl 0.8s var(--ease-bounce) both;
+}
+.leaf--1 { animation-delay: 0.3s; }
+.leaf--2 { animation-delay: 0.5s; }
+.leaf--3 { animation-delay: 0.7s; }
+.leaf--4 { animation-delay: 0.9s; }
+
+/* ---- Rose ---- */
+.rose { animation: bloom 1s var(--ease-bounce) both; transform-origin: center; }
+.rose--1 { animation-delay: 1.1s; }
+.rose--2 { animation-delay: 1.4s; }
+
+/* ---- Small flower petals ---- */
+.petal-anim { animation: bloom 0.5s var(--ease-bounce) 1.6s both; transform-origin: center; }
+
+/* ---- Stem ---- */
+.stem-path {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: pathDraw 2s var(--ease-silk) 0.2s forwards;
+}
+
+/* ---- Name Letter Animation ---- */
+.name-char {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(30px) rotate(-5deg);
+  animation: nameReveal 0.5s var(--ease-bounce) both;
+}
+
+@keyframes nameReveal {
+  to { opacity: 1; transform: translateY(0) rotate(0deg); }
+}
+
+/* ---- Shimmer overlay on buttons ---- */
+.rsvp-btn::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  animation: shimmerBar 2.5s var(--ease-silk) 1s infinite;
+}
+
+/* ---- Gold text shimmer ---- */
+.shimmer-text {
+  background: linear-gradient(
+    90deg,
+    var(--color-gold) 0%,
+    var(--color-gold-light) 25%,
+    #fff8ee 50%,
+    var(--color-gold-light) 75%,
+    var(--color-gold) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: goldShimmer 3s linear infinite;
+}
+
+/* ---- Glass card shimmer ---- */
+.glass-card {
+  position: relative;
+  overflow: hidden;
+}
+.glass-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent);
+  animation: shimmerBar 4s var(--ease-silk) 2s infinite;
+  pointer-events: none;
+}
+
+/* ---- Floating particles in countdown ---- */
+.countdown__item:hover .countdown__number {
+  animation: countdownTick 0.3s var(--ease-bounce);
+}
+
+/* ---- Parallax scroll class ---- */
+.parallax-slow   { will-change: transform; }
+.parallax-medium { will-change: transform; }
+.parallax-fast   { will-change: transform; }
+
+/* ---- GPU acceleration hints ---- */
+.scene,
+.botanical,
+.blur-orb,
+.monogram,
+.names-block,
+.date-card,
+.venue-card,
+.countdown,
+.rsvp-form {
+  will-change: transform;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* ---- Reduced Motion Support ---- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .shimmer-text,
+  .rsvp-btn::after,
+  .glass-card::before,
+  .music-rings span {
+    animation: none !important;
+  }
+
+  .reveal-text {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .monogram,
+  .corner-ornament,
+  .scene-1__tagline,
+  .scroll-cta {
+    animation: none !important;
+    opacity: 1 !important;
+  }
+}
