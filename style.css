@@ -454,7 +454,9 @@ body {
 }
 
 .name.shimmer-text {
+  opacity: 1;
   animation: goldShimmer 3s linear infinite;
+  
 }
 
 .name-inner {
