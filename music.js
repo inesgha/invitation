@@ -1,48 +1,57 @@
+/* =====================================================
+   MUSIC.JS — Lecture / pause de la musique de fond
+   ===================================================== */
+
 'use strict';
 
 const MusicController = (() => {
+  const PLAY_ICON  = 'M10 8.5 L16 12 L10 15.5 Z';
+  const PAUSE_ICON = 'M9 7.5h2v9H9zM13 7.5h2v9h-2z';
+
   let audio = null;
-  let isPlaying = false;
+  let btn = null;
+  let path = null;
+  let initialized = false;
 
   function init() {
-    audio = new Audio('music.mp3'); // chemin vers ton fichier
-    audio.loop = true; // la musique tourne en boucle
+    if (initialized) return;          // évite la double initialisation
+    initialized = true;
 
-    const btn = document.getElementById('musicBtn');
-    const path = document.getElementById('musicPath');
+    audio = new Audio('music.mp3');
+    audio.loop = true;
+    audio.preload = 'auto';
+    audio.volume = 0.7;
 
+    btn  = document.getElementById('musicBtn');
+    path = document.getElementById('musicPath');
     if (!btn) return;
 
+    // Un bouton <button> déclenche déjà "click" avec Entrée / Espace
     btn.addEventListener('click', toggle);
-    btn.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        toggle();
-      }
-    });
+
+    audio.addEventListener('play',  () => render(true));
+    audio.addEventListener('pause', () => render(false));
   }
+
+  function render(playing) {
+    if (!btn) return;
+    btn.classList.toggle('paused', !playing);
+    btn.setAttribute('aria-label', playing ? 'Mettre la musique en pause' : 'Lire la musique');
+    if (path) path.setAttribute('d', playing ? PAUSE_ICON : PLAY_ICON);
+  }
+
+  function play() {
+    if (!audio) return;
+    const p = audio.play();
+    if (p && p.catch) p.catch(() => render(false)); // lecture bloquée par le navigateur
+  }
+
+  function pause() { if (audio) audio.pause(); }
 
   function toggle() {
-    const btn = document.getElementById('musicBtn');
-    const path = document.getElementById('musicPath');
-
-    if (isPlaying) {
-      audio.pause();
-      isPlaying = false;
-      btn.setAttribute('aria-label', 'Lire la musique');
-      if (path) path.setAttribute('d', 'M10 8.5 L16 12 L10 15.5 Z'); // Play icon
-    } else {
-      audio.play();
-      isPlaying = true;
-      btn.setAttribute('aria-label', 'Mettre la musique en pause');
-      if (path) path.setAttribute('d', 'M8 6h2v12H8zM14 6h2v12h-2z'); // Pause icon
-    }
+    if (!audio) return;
+    if (audio.paused) play(); else pause();
   }
 
-  return { init };
+  return { init, play, pause, toggle };
 })();
-
-// Initialisation après chargement de la page
-document.addEventListener('DOMContentLoaded', () => {
-  MusicController.init();
-});

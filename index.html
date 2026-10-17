@@ -2,32 +2,58 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-  <meta name="description" content="Wedding Invitation — Hayfa & Hachem" />
-  <title>Hayfa & Hachem </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a0704" />
+  <title>Hayfa &amp; Hachem — Invitation de mariage</title>
+  <meta name="description" content="Hayfa &amp; Hachem ont la joie de vous inviter à célébrer leur mariage." />
+
+  <!-- Aperçu du lien (WhatsApp, Facebook, Messenger…) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Hayfa &amp; Hachem — Invitation de mariage" />
+  <meta property="og:description" content="Vous êtes invités à célébrer notre mariage. Ouvrez l'invitation ✨" />
+  <meta property="og:locale" content="fr_FR" />
+  <meta name="twitter:card" content="summary" />
+
+  <!-- Icône d'onglet -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230a0704'/%3E%3Ctext x='32' y='44' text-anchor='middle' font-family='Georgia,serif' font-size='30' fill='%23C9A96E'%3EH%26H%3C/text%3E%3C/svg%3E" />
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Poppins:wght@200;300;400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Poppins:wght@200;300;400&display=swap" rel="stylesheet" />
 
   <!-- Styles -->
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="animations.css" />
   <link rel="stylesheet" href="responsive.css" />
-  <script src="music.js"></script>
-
 </head>
-<body>
+<body class="is-locked">
+
+  <a href="#scene1" class="skip-link">Aller au contenu</a>
+
+  <!-- =================== ÉCRAN D'OUVERTURE =================== -->
+  <div class="opener" id="opener" role="dialog" aria-modal="true" aria-label="Ouvrir l'invitation">
+    <div class="opener__frame" aria-hidden="true"></div>
+    <div class="opener__content">
+      <p class="opener__eyebrow">Invitation de mariage</p>
+      <div class="opener__seal" aria-hidden="true">
+        <span data-bind="initials">H&amp;H</span>
+      </div>
+      <p class="opener__names"><span data-bind="bride">Hayfa</span> <em>&amp;</em> <span data-bind="groom">Hachem</span></p>
+      <button class="opener__btn" id="openerBtn" type="button">
+        <span>Ouvrir l'invitation</span>
+      </button>
+      <p class="opener__hint">🎵 Avec musique</p>
+    </div>
+  </div>
 
   <!-- Canvas for particles -->
   <canvas id="particleCanvas" aria-hidden="true"></canvas>
 
   <!-- Music control -->
-  <div class="music-control" id="musicControl" role="region" aria-label="Contrôle de la musique">
-    <button class="music-btn" id="musicBtn" aria-label="Lecture / Pause de la musique" title="Musique">
+  <div class="music-control" id="musicControl">
+    <button class="music-btn paused" id="musicBtn" type="button" aria-label="Lire la musique" title="Musique">
       <svg class="music-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.2"/>
         <path id="musicPath" d="M10 8.5 L16 12 L10 15.5 Z" fill="currentColor"/>
       </svg>
       <div class="music-rings" aria-hidden="true">
@@ -37,19 +63,19 @@
   </div>
 
   <!-- Scroll progress -->
-  <div class="scroll-progress" id="scrollProgress" aria-hidden="true">
+  <div class="scroll-progress" aria-hidden="true">
     <div class="scroll-bar" id="scrollBar"></div>
   </div>
 
+  <main>
   <!-- =================== SCENE 1 — INTRO =================== -->
-  <section class="scene scene-1 active" id="scene1" aria-label="Introduction">
+  <section class="scene scene-1" id="scene1" aria-label="Introduction">
     <div class="scene-bg" aria-hidden="true">
       <div class="light-burst"></div>
       <div class="blur-orb blur-orb--1"></div>
       <div class="blur-orb blur-orb--2"></div>
     </div>
 
-    <!-- SVG corner ornaments -->
     <svg class="corner-ornament corner-ornament--tl" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <path class="ornament-path" d="M5 5 Q5 60 5 115" stroke="url(#goldGrad)" stroke-width="0.8" fill="none"/>
       <path class="ornament-path" d="M5 5 Q60 5 115 5" stroke="url(#goldGrad)" stroke-width="0.8" fill="none"/>
@@ -59,7 +85,7 @@
       <circle cx="35" cy="5" r="1.5" fill="#C9A96E" opacity="0.6"/>
       <circle cx="5" cy="35" r="1.5" fill="#C9A96E" opacity="0.6"/>
       <!-- Flower -->
-      <g transform="translate(22,22)" class="svg-flower">
+      <g transform="translate(22,22)"><g class="svg-flower">
         <ellipse cx="0" cy="-8" rx="3" ry="6" fill="#C9A96E" opacity="0.7" transform="rotate(0)"/>
         <ellipse cx="0" cy="-8" rx="3" ry="6" fill="#C9A96E" opacity="0.7" transform="rotate(45)"/>
         <ellipse cx="0" cy="-8" rx="3" ry="6" fill="#C9A96E" opacity="0.7" transform="rotate(90)"/>
@@ -69,9 +95,9 @@
         <ellipse cx="0" cy="-8" rx="3" ry="6" fill="#C9A96E" opacity="0.7" transform="rotate(270)"/>
         <ellipse cx="0" cy="-8" rx="3" ry="6" fill="#C9A96E" opacity="0.7" transform="rotate(315)"/>
         <circle cx="0" cy="0" r="4" fill="#E8D5B0"/>
-      </g>
+      </g></g>
       <defs>
-        <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <linearGradient id="goldGrad" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="120" y2="120">
           <stop offset="0%" stop-color="#C9A96E"/>
           <stop offset="50%" stop-color="#E8D5B0"/>
           <stop offset="100%" stop-color="#C9A96E"/>
@@ -87,7 +113,7 @@
       <circle cx="115" cy="5" r="3" fill="#C9A96E"/>
       <circle cx="85" cy="5" r="1.5" fill="#C9A96E" opacity="0.6"/>
       <circle cx="115" cy="35" r="1.5" fill="#C9A96E" opacity="0.6"/>
-      <g transform="translate(98,22)" class="svg-flower">
+      <g transform="translate(98,22)"><g class="svg-flower">
         <ellipse cx="0" cy="-8" rx="3" ry="6" fill="#C9A96E" opacity="0.7" transform="rotate(0)"/>
         <ellipse cx="0" cy="-8" rx="3" ry="6" fill="#C9A96E" opacity="0.7" transform="rotate(60)"/>
         <ellipse cx="0" cy="-8" rx="3" ry="6" fill="#C9A96E" opacity="0.7" transform="rotate(120)"/>
@@ -95,9 +121,9 @@
         <ellipse cx="0" cy="-8" rx="3" ry="6" fill="#C9A96E" opacity="0.7" transform="rotate(240)"/>
         <ellipse cx="0" cy="-8" rx="3" ry="6" fill="#C9A96E" opacity="0.7" transform="rotate(300)"/>
         <circle cx="0" cy="0" r="4" fill="#E8D5B0"/>
-      </g>
+      </g></g>
       <defs>
-        <linearGradient id="goldGrad2" x1="100%" y1="0%" x2="0%" y2="100%">
+        <linearGradient id="goldGrad2" gradientUnits="userSpaceOnUse" x1="120" y1="0" x2="0" y2="120">
           <stop offset="0%" stop-color="#C9A96E"/>
           <stop offset="50%" stop-color="#E8D5B0"/>
           <stop offset="100%" stop-color="#C9A96E"/>
@@ -106,15 +132,17 @@
     </svg>
 
     <div class="scene-content scene-1__content">
-      <div class="monogram" aria-label="Monogramme Y & K">
-        <span class="monogram__letter" aria-hidden="true">H</span>
+      <p class="scene-1__eyebrow">Save the date</p>
+      <div class="monogram" aria-label="Hayfa et Hachem">
+        <span class="monogram__letter" aria-hidden="true" data-bind="brideInitial">H</span>
         <span class="monogram__amp" aria-hidden="true">&amp;</span>
-        <span class="monogram__letter" aria-hidden="true">H</span>
+        <span class="monogram__letter" aria-hidden="true" data-bind="groomInitial">H</span>
       </div>
       <p class="scene-1__tagline">Une histoire d'amour éternel</p>
+      <p class="scene-1__date" data-bind="dateShort">17 · 07 · 2027</p>
     </div>
 
-    <button class="scroll-cta" id="scrollCta" aria-label="Découvrir l'invitation">
+    <button class="scroll-cta" id="scrollCta" type="button" aria-label="Découvrir l'invitation">
       <span>Découvrir</span>
       <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
         <path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
@@ -122,8 +150,8 @@
     </button>
   </section>
 
-  <!-- =================== SCENE 2 — FLORAL FRAME =================== -->
-  <section class="scene scene-2" id="scene2" aria-label="Cadre floral">
+  <!-- =================== SCENE 2 — FAMILLES =================== -->
+  <section class="scene scene-2" id="scene2" aria-label="Les familles">
     <div class="scene-bg" aria-hidden="true">
       <div class="blur-orb blur-orb--3"></div>
     </div>
@@ -139,21 +167,21 @@
         <path d="M95 250 Q55 210 35 170 Q65 185 95 250" fill="#6B8C5F" opacity="0.7" class="leaf leaf--3"/>
         <path d="M98 200 Q138 160 158 120 Q128 138 98 200" fill="#6B8C5F" opacity="0.6" class="leaf leaf--4"/>
         <!-- Roses -->
-        <g transform="translate(85, 320)" class="rose rose--1">
+        <g transform="translate(85, 320)"><g class="rose rose--1">
           <ellipse cx="0" cy="0" rx="14" ry="10" fill="#E8C4B8" opacity="0.9"/>
           <ellipse cx="-5" cy="-3" rx="10" ry="7" fill="#D4A090"/>
           <ellipse cx="3" cy="-5" rx="8" ry="6" fill="#C08070"/>
           <ellipse cx="0" cy="-7" rx="5" ry="4" fill="#B07060"/>
           <circle cx="0" cy="-8" r="3" fill="#A06050"/>
-        </g>
-        <g transform="translate(108, 180)" class="rose rose--2">
+        </g></g>
+        <g transform="translate(108, 180)"><g class="rose rose--2">
           <ellipse cx="0" cy="0" rx="12" ry="9" fill="#E8D5B0" opacity="0.9"/>
           <ellipse cx="-4" cy="-2" rx="9" ry="6" fill="#D4C090"/>
           <ellipse cx="3" cy="-4" rx="7" ry="5" fill="#C0A870"/>
           <circle cx="0" cy="-6" r="3" fill="#B09060"/>
-        </g>
+        </g></g>
         <!-- Small flowers -->
-        <g transform="translate(75, 90)" class="small-flower">
+        <g transform="translate(75, 90)"><g class="small-flower">
           <circle cx="0" cy="-6" r="3" fill="#E8C4B8" class="petal-anim"/>
           <circle cx="5.2" cy="-3" r="3" fill="#E8C4B8" class="petal-anim"/>
           <circle cx="5.2" cy="3" r="3" fill="#E8C4B8" class="petal-anim"/>
@@ -161,7 +189,7 @@
           <circle cx="-5.2" cy="3" r="3" fill="#E8C4B8" class="petal-anim"/>
           <circle cx="-5.2" cy="-3" r="3" fill="#E8C4B8" class="petal-anim"/>
           <circle cx="0" cy="0" r="4" fill="#E8D5B0"/>
-        </g>
+        </g></g>
         <!-- Gold dots -->
         <circle cx="100" cy="300" r="2" fill="#C9A96E" opacity="0.8"/>
         <circle cx="92" cy="140" r="1.5" fill="#C9A96E" opacity="0.6"/>
@@ -174,20 +202,20 @@
         <path d="M100 350 Q60 310 40 270 Q70 285 100 350" fill="#6B8C5F" opacity="0.6" class="leaf leaf--2"/>
         <path d="M105 250 Q145 210 165 170 Q135 185 105 250" fill="#6B8C5F" opacity="0.7" class="leaf leaf--3"/>
         <path d="M102 200 Q62 160 42 120 Q72 138 102 200" fill="#6B8C5F" opacity="0.6" class="leaf leaf--4"/>
-        <g transform="translate(115, 320)" class="rose rose--1">
+        <g transform="translate(115, 320)"><g class="rose rose--1">
           <ellipse cx="0" cy="0" rx="14" ry="10" fill="#E8C4B8" opacity="0.9"/>
           <ellipse cx="5" cy="-3" rx="10" ry="7" fill="#D4A090"/>
           <ellipse cx="-3" cy="-5" rx="8" ry="6" fill="#C08070"/>
           <ellipse cx="0" cy="-7" rx="5" ry="4" fill="#B07060"/>
           <circle cx="0" cy="-8" r="3" fill="#A06050"/>
-        </g>
-        <g transform="translate(92, 180)" class="rose rose--2">
+        </g></g>
+        <g transform="translate(92, 180)"><g class="rose rose--2">
           <ellipse cx="0" cy="0" rx="12" ry="9" fill="#E8C4B8" opacity="0.9"/>
           <ellipse cx="4" cy="-2" rx="9" ry="6" fill="#D4A090"/>
           <ellipse cx="-3" cy="-4" rx="7" ry="5" fill="#C08070"/>
           <circle cx="0" cy="-6" r="3" fill="#B07060"/>
-        </g>
-        <g transform="translate(125, 90)" class="small-flower">
+        </g></g>
+        <g transform="translate(125, 90)"><g class="small-flower">
           <circle cx="0" cy="-6" r="3" fill="#E8C4B8" class="petal-anim"/>
           <circle cx="5.2" cy="-3" r="3" fill="#E8C4B8" class="petal-anim"/>
           <circle cx="5.2" cy="3" r="3" fill="#E8C4B8" class="petal-anim"/>
@@ -195,7 +223,7 @@
           <circle cx="-5.2" cy="3" r="3" fill="#E8C4B8" class="petal-anim"/>
           <circle cx="-5.2" cy="-3" r="3" fill="#E8C4B8" class="petal-anim"/>
           <circle cx="0" cy="0" r="4" fill="#E8D5B0"/>
-        </g>
+        </g></g>
         <circle cx="100" cy="300" r="2" fill="#C9A96E" opacity="0.8"/>
         <circle cx="108" cy="140" r="1.5" fill="#C9A96E" opacity="0.6"/>
         <circle cx="90" cy="450" r="1.5" fill="#C9A96E" opacity="0.7"/>
@@ -203,63 +231,52 @@
     </div>
 
     <div class="scene-content scene-2__content">
-      <p class="eyebrow reveal-text" data-delay="0.2">Avec la bénédiction de leurs familles</p>
-      <div class="monogram" aria-label="Monogramme Y & K">
-        <span class="monogram__letter" aria-hidden="true">Salem klabi</span>
-        <span class="monogram__amp" aria-hidden="true">&amp;</span>
-        <span class="monogram__letter" aria-hidden="true">bachir ben njima</span>
+      <p class="eyebrow reveal-text" data-delay="0">Avec la bénédiction de Dieu</p>
+      <p class="families-intro reveal-text" data-delay="0.2">Les familles</p>
+      <div class="families reveal-text" data-delay="0.4">
+        <span class="families__name" data-bind="family0">Salem Klabi</span>
+        <span class="families__amp" aria-hidden="true">&amp;</span>
+        <span class="families__name" data-bind="family1">Bachir Ben Njima</span>
       </div>
-      <svg class="gold-divider" viewBox="0 0 300 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <svg class="gold-divider reveal-text" data-delay="0.6" viewBox="0 0 300 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         <line x1="0" y1="10" x2="120" y2="10" stroke="url(#divGrad)" stroke-width="0.8"/>
         <path d="M135 10 Q150 3 165 10 Q150 17 135 10" fill="#C9A96E"/>
         <line x1="180" y1="10" x2="300" y2="10" stroke="url(#divGrad2)" stroke-width="0.8"/>
         <defs>
-          <linearGradient id="divGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <linearGradient id="divGrad" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="120" y2="0">
             <stop offset="0%" stop-color="#C9A96E" stop-opacity="0"/>
             <stop offset="100%" stop-color="#C9A96E"/>
           </linearGradient>
-          <linearGradient id="divGrad2" x1="0%" y1="0%" x2="100%" y2="0%">
+          <linearGradient id="divGrad2" gradientUnits="userSpaceOnUse" x1="180" y1="0" x2="300" y2="0">
             <stop offset="0%" stop-color="#C9A96E"/>
             <stop offset="100%" stop-color="#C9A96E" stop-opacity="0"/>
           </linearGradient>
         </defs>
       </svg>
-      <p class="scene-2__invite reveal-text" data-delay="0.5">vous invitent à célébrer</p>
+      <p class="scene-2__invite reveal-text" data-delay="0.8">ont l'immense joie de vous inviter<br/>au mariage de leurs enfants</p>
     </div>
   </section>
 
-  <!-- =================== SCENE 3 — NAMES =================== -->
-  <section class="scene scene-3" id="scene3" aria-label="Noms des mariés">
+  <!-- =================== SCENE 3 — NOMS =================== -->
+  <section class="scene scene-3" id="scene3" aria-label="Les mariés">
     <div class="scene-bg" aria-hidden="true">
       <div class="blur-orb blur-orb--4"></div>
       <div class="blur-orb blur-orb--5"></div>
     </div>
 
     <div class="scene-content scene-3__content">
-      <div class="names-block">
-        <h1 class="name name--bride shimmer-text" aria-label="Hayfa">
-          <span class="name-inner">Hayfa</span>
-        </h1>
-        <div class="names-separator" aria-hidden="true">
+      <h1 class="names-block">
+        <span class="name name--bride shimmer-text" data-bind="bride">Hayfa</span>
+        <span class="names-separator" aria-hidden="true">
           <svg viewBox="0 0 180 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M20 30 Q50 10 90 30 Q130 50 160 30" stroke="url(#sepGrad)" stroke-width="0.8" fill="none"/>
-            <path d="M20 30 Q50 50 90 30 Q130 10 160 30" stroke="url(#sepGrad)" stroke-width="0.8" fill="none"/>
-            <text x="90" y="35" text-anchor="middle" font-family="'Great Vibes', cursive" font-size="28" fill="#C9A96E">&amp;</text>
-            <defs>
-              <linearGradient id="sepGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stop-color="#C9A96E" stop-opacity="1"/>
-                <stop offset="50%" stop-color="#C9A96E"/>
-                <stop offset="100%" stop-color="#C9A96E" stop-opacity="1"/>
-              </linearGradient>
-            </defs>
+            <path d="M10 30 Q50 10 90 30 Q130 50 170 30" stroke="#C9A96E" stroke-opacity="0.7" stroke-width="0.8" fill="none"/>
+            <path d="M10 30 Q50 50 90 30 Q130 10 170 30" stroke="#C9A96E" stroke-opacity="0.7" stroke-width="0.8" fill="none"/>
+            <circle cx="90" cy="30" r="13" fill="#0f0a06" stroke="#C9A96E" stroke-width="0.8"/>
+            <text x="90" y="37" text-anchor="middle" font-family="'Great Vibes', cursive" font-size="22" fill="#E8D5B0">&amp;</text>
           </svg>
-        </div>
-        <h1 class="name name--groom shimmer-text" aria-label="Hachem">
-          <span class="name-inner" >Hachem</span>
-        </h1>
-      </div>
-
-      <!-- Glow ring -->
+        </span>
+        <span class="name name--groom shimmer-text" data-bind="groom">Hachem</span>
+      </h1>
       <div class="glow-ring" aria-hidden="true"></div>
     </div>
   </section>
@@ -267,33 +284,20 @@
   <!-- =================== SCENE 4 — DATE =================== -->
   <section class="scene scene-4" id="scene4" aria-label="Date du mariage">
     <div class="scene-content scene-4__content">
-      <p class="eyebrow reveal-text" data-delay="0">La cérémonie aura lieu le</p>
+      <p class="eyebrow reveal-text" data-delay="0">La fête aura lieu le</p>
 
       <div class="date-card reveal-text" data-delay="0.3">
-        <div class="date-card__inner">
-          <!-- Calendar SVG icon -->
-          <svg class="date-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <rect x="4" y="8" width="40" height="36" rx="3" stroke="#C9A96E" stroke-width="1"/>
-            <line x1="4" y1="18" x2="44" y2="18" stroke="#C9A96E" stroke-width="1"/>
-            <line x1="14" y1="4" x2="14" y2="14" stroke="#C9A96E" stroke-width="1.5" stroke-linecap="round"/>
-            <line x1="34" y1="4" x2="34" y2="14" stroke="#C9A96E" stroke-width="1.5" stroke-linecap="round"/>
-            <text x="24" y="36" text-anchor="middle" font-size="14" font-weight="600" fill="#C9A96E" font-family="Poppins">21</text>
-          </svg>
-
-          <div class="date-display">
-            <span class="date-day">21</span>
-            <div class="date-meta">
-              <span class="date-month">Juiller</span>
-              <span class="date-year">2026</span>
-            </div>
-          </div>
+        <p class="date-day-name" data-bind="weekday">Samedi</p>
+        <div class="date-display">
+          <span class="date-side" data-bind="monthName">Juillet</span>
+          <span class="date-day" data-bind="day">17</span>
+          <span class="date-side" data-bind="year">2027</span>
         </div>
 
-        <!-- Animated gold line -->
         <svg class="date-line" viewBox="0 0 200 4" aria-hidden="true">
           <line x1="0" y1="2" x2="200" y2="2" stroke="url(#lineGrad)" stroke-width="1.5" class="animated-line"/>
           <defs>
-            <linearGradient id="lineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <linearGradient id="lineGrad" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="200" y2="0">
               <stop offset="0%" stop-color="#C9A96E" stop-opacity="0"/>
               <stop offset="50%" stop-color="#E8D5B0"/>
               <stop offset="100%" stop-color="#C9A96E" stop-opacity="0"/>
@@ -301,34 +305,45 @@
           </defs>
         </svg>
 
-        <p class="date-day-name">Samedi</p>
+        <div class="schedule">
+          <div class="schedule__item">
+            <span class="schedule__time" data-bind="ceremonyTime">17h00</span>
+            <span class="schedule__label">Cérémonie</span>
+          </div>
+          <span class="schedule__dot" aria-hidden="true"></span>
+          <div class="schedule__item">
+            <span class="schedule__time" data-bind="receptionTime">20h00</span>
+            <span class="schedule__label">Réception</span>
+          </div>
+        </div>
       </div>
 
-      <p class="date-timing reveal-text" data-delay="0.7">Cérémonie à 17h00 · Réception à 20h00</p>
+      <button class="ghost-btn reveal-text" data-delay="0.6" id="calendarBtn" type="button">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2" stroke="currentColor" stroke-width="1.2"/><path d="M3.5 9.5h17M8 3v4M16 3v4M12 12.5v5M9.5 15h5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+        <span>Ajouter au calendrier</span>
+      </button>
     </div>
   </section>
 
-  <!-- =================== SCENE 5 — VENUE =================== -->
-  <section class="scene scene-5" id="scene5" aria-label="Lieu de la cérémonie">
+  <!-- =================== SCENE 5 — LIEU =================== -->
+  <section class="scene scene-5" id="scene5" aria-label="Lieu de la fête">
     <div class="scene-content scene-5__content">
       <p class="eyebrow reveal-text" data-delay="0">Le lieu</p>
 
       <div class="venue-card reveal-text glass-card" data-delay="0.3">
-        <!-- Location icon -->
         <svg class="venue-icon" viewBox="0 0 32 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <path d="M16 2C9.37 2 4 7.37 4 14C4 22 16 38 16 38C16 38 28 22 28 14C28 7.37 22.63 2 16 2Z" stroke="#C9A96E" stroke-width="1" fill="rgba(201,169,110,0.1)"/>
           <circle cx="16" cy="14" r="5" stroke="#C9A96E" stroke-width="1" fill="rgba(201,169,110,0.2)"/>
         </svg>
 
-        <h2 class="venue-name">Maison de marier</h2>
-        <p class="venue-address">Route de sfax<br/>ksour essef, Mahdia</p>
+        <h2 class="venue-name" data-bind="venueName">Maison du marié</h2>
+        <p class="venue-address" data-bind="venueAddress">Route de Sfax<br/>Ksour Essef, Mahdia</p>
 
-        <!-- Animated decorative line -->
         <div class="venue-divider" aria-hidden="true">
           <svg viewBox="0 0 240 8" fill="none">
             <path d="M0 4 Q60 0 120 4 Q180 8 240 4" stroke="url(#vLineGrad)" stroke-width="0.8" fill="none" class="animated-line"/>
             <defs>
-              <linearGradient id="vLineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <linearGradient id="vLineGrad" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="240" y2="0">
                 <stop offset="0%" stop-color="#C9A96E" stop-opacity="0"/>
                 <stop offset="50%" stop-color="#C9A96E"/>
                 <stop offset="100%" stop-color="#C9A96E" stop-opacity="0"/>
@@ -337,48 +352,130 @@
           </svg>
         </div>
 
-        <p class="venue-note">Navette disponible depuis l'Hôtel El Mouradi</p>
+        <p class="venue-note" data-bind="venueNote">Navette disponible depuis l'Hôtel El Mouradi</p>
+
+        <a class="ghost-btn" id="mapsLink" href="#" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M9 4 3.5 6v14L9 18l6 2 5.5-2V4L15 6 9 4Z" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/><path d="M9 4v14M15 6v14" stroke="currentColor" stroke-width="1.2"/></svg>
+          <span>Voir l'itinéraire</span>
+        </a>
       </div>
     </div>
   </section>
 
- 
+  <!-- =================== SCENE 6 — COMPTE À REBOURS =================== -->
+  <section class="scene scene-6" id="scene6" aria-label="Compte à rebours">
+    <div class="scene-bg" aria-hidden="true">
+      <div class="blur-orb blur-orb--6"></div>
+    </div>
+    <div class="scene-content scene-6__content">
+      <p class="eyebrow reveal-text" data-delay="0">Plus que</p>
+
+      <div class="countdown reveal-text" data-delay="0.3" id="countdown">
+        <div class="countdown__item">
+          <div class="countdown__ring">
+            <svg viewBox="0 0 80 80" aria-hidden="true">
+              <circle cx="40" cy="40" r="34" class="ring-track"/>
+              <circle cx="40" cy="40" r="34" class="ring-progress" id="ringDays"/>
+            </svg>
+            <span class="countdown__number" id="days">00</span>
+          </div>
+          <span class="countdown__label">Jours</span>
+        </div>
+        <div class="countdown__item">
+          <div class="countdown__ring">
+            <svg viewBox="0 0 80 80" aria-hidden="true">
+              <circle cx="40" cy="40" r="34" class="ring-track"/>
+              <circle cx="40" cy="40" r="34" class="ring-progress" id="ringHours"/>
+            </svg>
+            <span class="countdown__number" id="hours">00</span>
+          </div>
+          <span class="countdown__label">Heures</span>
+        </div>
+        <div class="countdown__item">
+          <div class="countdown__ring">
+            <svg viewBox="0 0 80 80" aria-hidden="true">
+              <circle cx="40" cy="40" r="34" class="ring-track"/>
+              <circle cx="40" cy="40" r="34" class="ring-progress" id="ringMinutes"/>
+            </svg>
+            <span class="countdown__number" id="minutes">00</span>
+          </div>
+          <span class="countdown__label">Minutes</span>
+        </div>
+        <div class="countdown__item">
+          <div class="countdown__ring">
+            <svg viewBox="0 0 80 80" aria-hidden="true">
+              <circle cx="40" cy="40" r="34" class="ring-track"/>
+              <circle cx="40" cy="40" r="34" class="ring-progress" id="ringSeconds"/>
+            </svg>
+            <span class="countdown__number" id="seconds">00</span>
+          </div>
+          <span class="countdown__label">Secondes</span>
+        </div>
+      </div>
+
+      <p class="countdown-done" id="countdownDone" hidden>Le grand jour est arrivé ! 🤍</p>
+    </div>
+  </section>
+
   <!-- =================== SCENE 7 — RSVP =================== -->
   <section class="scene scene-7" id="scene7" aria-label="Confirmation de présence">
     <div class="scene-content scene-7__content">
       <p class="eyebrow reveal-text" data-delay="0">Confirmez votre présence</p>
-      <p class="rsvp-subtitle reveal-text" data-delay="0.2">Avant le 15 juiller 2026</p>
+      <p class="rsvp-subtitle reveal-text" data-delay="0.2">Avant le <span data-bind="rsvpDeadline">1er juillet 2027</span></p>
 
-      <div class="rsvp-form glass-card reveal-text" data-delay="0.4">
+      <form class="rsvp-form glass-card reveal-text" data-delay="0.4" id="rsvpForm" novalidate>
         <div class="rsvp-form__field">
-          <label for="rsvpName" class="sr-only">Votre nom</label>
-          <input type="text" id="rsvpName" placeholder="Votre nom complet" class="rsvp-input" autocomplete="name"/>
-        </div>
-        <div class="rsvp-form__field">
-          <label for="rsvpGuests" class="sr-only">Nombre d'invités</label>
-          <select id="rsvpGuests" class="rsvp-input rsvp-select">
-            <option value="">Nombre d'invités</option>
-            <option value="1">1 personne</option>
-            <option value="2">2 personnes</option>
-            <option value="3">3 personnes</option>
-            <option value="4">4 personnes</option>
-          </select>
+          <label for="rsvpName" class="rsvp-label">Votre nom</label>
+          <input type="text" id="rsvpName" name="name" placeholder="Nom et prénom" class="rsvp-input" autocomplete="name" required/>
+          <p class="rsvp-error" id="nameError" hidden>Merci d'indiquer votre nom.</p>
         </div>
 
-        <button class="rsvp-btn" id="rsvpBtn" aria-label="Confirmer votre présence">
-          <span class="rsvp-btn__text">Je confirme ma présence</span>
+        <fieldset class="rsvp-form__field rsvp-choice">
+          <legend class="rsvp-label">Serez-vous présent(e) ?</legend>
+          <div class="rsvp-choice__options">
+            <label class="choice">
+              <input type="radio" name="attending" value="yes" checked/>
+              <span>Avec plaisir</span>
+            </label>
+            <label class="choice">
+              <input type="radio" name="attending" value="no"/>
+              <span>Malheureusement non</span>
+            </label>
+          </div>
+        </fieldset>
+
+        <div class="rsvp-form__field" id="guestsField">
+          <label for="rsvpGuests" class="rsvp-label">Nombre de personnes</label>
+          <div class="select-wrap">
+            <select id="rsvpGuests" name="guests" class="rsvp-input rsvp-select">
+              <option value="1">1 personne</option>
+              <option value="2">2 personnes</option>
+              <option value="3">3 personnes</option>
+              <option value="4">4 personnes</option>
+              <option value="5">5 personnes</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="rsvp-form__field">
+          <label for="rsvpMessage" class="rsvp-label">Un petit mot <em>(facultatif)</em></label>
+          <textarea id="rsvpMessage" name="message" rows="3" class="rsvp-input rsvp-textarea" placeholder="Vos vœux pour les mariés…"></textarea>
+        </div>
+
+        <button class="rsvp-btn" id="rsvpBtn" type="submit">
+          <span class="rsvp-btn__text">Envoyer ma réponse</span>
           <span class="rsvp-btn__ripple" aria-hidden="true"></span>
           <svg class="rsvp-btn__icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
           </svg>
         </button>
 
-        <p class="rsvp-note">Merci de confirmer votre venue pour que nous puissions préparer le plus beau des jours.</p>
-      </div>
+        <p class="rsvp-note">Votre réponse sera envoyée aux mariés via WhatsApp.</p>
+      </form>
     </div>
   </section>
 
-  <!-- =================== SCENE 8 — THANK YOU =================== -->
+  <!-- =================== SCENE 8 — MERCI =================== -->
   <section class="scene scene-8" id="scene8" aria-label="Remerciements">
     <div class="scene-bg" aria-hidden="true">
       <div class="blur-orb blur-orb--7"></div>
@@ -388,46 +485,39 @@
     <div class="hearts-container" id="heartsContainer" aria-hidden="true"></div>
 
     <div class="scene-content scene-8__content">
-      <div class="thank-you-monogram" aria-hidden="true">H &amp; H</div>
+      <div class="thank-you-monogram" aria-hidden="true" data-bind="initialsSpaced">H &amp; H</div>
       <h2 class="thank-you-title reveal-text" data-delay="0.2">Merci</h2>
       <p class="thank-you-subtitle reveal-text" data-delay="0.5">
         Votre présence est le plus beau des cadeaux.<br/>
         Nous vous attendons avec tout notre amour.
       </p>
       <svg class="gold-divider" viewBox="0 0 300 20" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-        <line x1="0" y1="10" x2="120" y2="10" stroke="url(#tDivGrad)" stroke-width="0.8"/>
+        <line x1="0" y1="10" x2="120" y2="10" stroke="url(#divGrad)" stroke-width="0.8"/>
         <path d="M135 10 Q150 3 165 10 Q150 17 135 10" fill="#C9A96E"/>
-        <line x1="180" y1="10" x2="300" y2="10" stroke="url(#tDivGrad2)" stroke-width="0.8"/>
-        <defs>
-          <linearGradient id="tDivGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#C9A96E" stop-opacity="0"/>
-            <stop offset="100%" stop-color="#C9A96E"/>
-          </linearGradient>
-          <linearGradient id="tDivGrad2" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#C9A96E"/>
-            <stop offset="100%" stop-color="#C9A96E" stop-opacity="0"/>
-          </linearGradient>
-        </defs>
+        <line x1="180" y1="10" x2="300" y2="10" stroke="url(#divGrad2)" stroke-width="0.8"/>
       </svg>
-      <p class="thank-you-names reveal-text" data-delay="0.8">Hayfa &amp; Hachem</p>
+      <p class="thank-you-names reveal-text" data-delay="0.8"><span data-bind="bride">Hayfa</span> &amp; <span data-bind="groom">Hachem</span></p>
     </div>
   </section>
+  </main>
 
   <!-- RSVP Success Modal -->
   <div class="modal" id="rsvpModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" hidden>
     <div class="modal__overlay" id="modalOverlay"></div>
     <div class="modal__content glass-card">
-      <div class="modal__hearts" aria-hidden="true">❤</div>
+      <div class="modal__hearts" aria-hidden="true">🤍</div>
       <h3 id="modalTitle" class="modal__title">Merci !</h3>
-      <p class="modal__message">Votre présence est confirmée.<br/>Nous vous attendons avec joie !</p>
-      <button class="modal__close rsvp-btn" id="modalClose">Fermer</button>
+      <p class="modal__message" id="modalMessage">Votre réponse est prête.<br/>Il ne reste qu'à l'envoyer sur WhatsApp.</p>
+      <a class="rsvp-btn modal__wa" id="modalWa" href="#" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" class="rsvp-btn__icon"><path d="M4 20l1.3-4A8 8 0 1 1 8 18.7L4 20Z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M9 9.5c0 2.8 2.2 5 5 5l1-1.2-1.6-.8-.7.7a3.6 3.6 0 0 1-2.4-2.4l.7-.7-.8-1.6L9 9.5Z" fill="currentColor"/></svg>
+        <span>Envoyer sur WhatsApp</span>
+      </a>
+      <button class="modal__close" id="modalClose" type="button">Fermer</button>
     </div>
   </div>
 
-  <!-- Accessible skip link -->
-  <a href="#scene1" class="skip-link">Aller au contenu</a>
-
   <!-- Scripts -->
+  <script src="config.js"></script>
   <script src="particles.js"></script>
   <script src="timeline.js"></script>
   <script src="music.js"></script>

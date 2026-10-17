@@ -181,15 +181,16 @@ const ParticleSystem = (() => {
     }
   }
 
-  /* ---- Light Ray ---- */
+  /* ---- Light Ray ---- (valeurs fixes : évite le scintillement) */
+  const RAYS = Array.from({ length: 6 }, () => ({ len: rand(140, 320), width: rand(1, 4) }));
   function drawLightRays() {
     const cx = W * 0.5;
     const cy = H * 0.3;
     const t  = Date.now() * 0.0003;
 
-    for (let i = 0; i < 6; i++) {
-      const angle = (i / 6) * Math.PI * 2 + t * 0.1;
-      const len   = rand(100, 300);
+    for (let i = 0; i < RAYS.length; i++) {
+      const angle = (i / RAYS.length) * Math.PI * 2 + t * 0.1;
+      const len   = RAYS[i].len;
       const alpha = 0.012 + Math.sin(t + i) * 0.005;
 
       const grd = ctx.createLinearGradient(cx, cy, cx + Math.cos(angle) * len, cy + Math.sin(angle) * len);
@@ -199,7 +200,7 @@ const ParticleSystem = (() => {
       ctx.save();
       ctx.globalAlpha = 1;
       ctx.strokeStyle = grd;
-      ctx.lineWidth = rand(1, 4);
+      ctx.lineWidth = RAYS[i].width;
       ctx.beginPath();
       ctx.moveTo(cx, cy);
       ctx.lineTo(cx + Math.cos(angle) * len, cy + Math.sin(angle) * len);
@@ -216,6 +217,12 @@ const ParticleSystem = (() => {
     ctx = canvas.getContext('2d');
     resize();
 
+    // Moins de particules sur mobile (fluidité + batterie)
+    if (window.innerWidth < 600) {
+      CFG.sparkles.count = 45;
+      CFG.petals.count = 10;
+    }
+
     // Create particles
     for (let i = 0; i < CFG.sparkles.count; i++) {
       particles.push(new Sparkle());
@@ -225,20 +232,23 @@ const ParticleSystem = (() => {
     }
 
     window.addEventListener('resize', resize);
+
+    // Respect des préférences d'accessibilité
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     start();
   }
 
   /* ---- Resize ---- */
   function resize() {
     if (!canvas) return;
-    const dpr = window.devicePixelRatio || 1;
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
     W = window.innerWidth;
     H = window.innerHeight;
     canvas.width  = W * dpr;
     canvas.height = H * dpr;
     canvas.style.width  = W + 'px';
     canvas.style.height = H + 'px';
-    ctx.scale(dpr, dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0); // (scale() s'accumulait à chaque redimensionnement)
   }
 
   /* ---- Render Loop ---- */
@@ -283,7 +293,7 @@ const ParticleSystem = (() => {
 
   /* ---- Burst effect (for RSVP confirm) ---- */
   function burst(x, y, count = 20) {
-    if (!ctx) return;
+    if (!ctx || !isRunning) return;
     const colors = ['rgba(201,169,110,', 'rgba(232,213,176,', 'rgba(232,196,184,'];
     for (let i = 0; i < count; i++) {
       const p = new Sparkle();

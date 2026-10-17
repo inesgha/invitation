@@ -1,44 +1,122 @@
 /* =====================================================
-   MAIN.JS — App Orchestrator
-   Countdown, RSVP, Scroll, Ripple, Keyboard Nav
+   MAIN.JS — Orchestration de l'invitation
+   Contenu, ouverture, compte à rebours, calendrier, RSVP
    ===================================================== */
 
 'use strict';
 
-/* ---- Wedding Date ---- */
-const WEDDING_DATE = new Date('2025-09-13T17:00:00');
+const CFG = (typeof INVITATION !== 'undefined') ? INVITATION : {};
 
-/* ---- DOM ready ---- */
-function ready(fn) {
-  if (document.readyState !== 'loading') {
-    fn();
-  } else {
-    document.addEventListener('DOMContentLoaded', fn);
+const MONTHS   = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+const WEEKDAYS = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
+
+const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
+const pad = n => String(n).padStart(2, '0');
+
+function parseDate(dateStr, timeStr = '00:00') {
+  const [y, m, d] = dateStr.split('-').map(Number);
+  const [hh, mm]  = timeStr.split(':').map(Number);
+  return new Date(y, m - 1, d, hh, mm);
+}
+
+const WEDDING_DATE = parseDate(CFG.date || '2027-07-17', CFG.ceremonyTime || '17:00');
+
+function formatTime(t) { const [h, m] = t.split(':'); return `${Number(h)}h${m}`; }
+function formatLongDate(dateStr) {
+  const d = parseDate(dateStr);
+  const day = d.getDate() === 1 ? '1er' : d.getDate();
+  return `${day} ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
+}
+
+/* ---- Remplit la page à partir de config.js ---- */
+function bindContent() {
+  const d = WEDDING_DATE;
+  const values = {
+    bride: CFG.bride,
+    groom: CFG.groom,
+    brideInitial: CFG.bride?.[0],
+    groomInitial: CFG.groom?.[0],
+    initials: CFG.bride && CFG.groom ? `${CFG.bride[0]}&${CFG.groom[0]}` : null,
+    initialsSpaced: CFG.bride && CFG.groom ? `${CFG.bride[0]} & ${CFG.groom[0]}` : null,
+    family0: CFG.families?.[0],
+    family1: CFG.families?.[1],
+    weekday: WEEKDAYS[d.getDay()],
+    day: pad(d.getDate()),
+    monthName: cap(MONTHS[d.getMonth()]),
+    year: d.getFullYear(),
+    dateShort: `${pad(d.getDate())} · ${pad(d.getMonth() + 1)} · ${d.getFullYear()}`,
+    ceremonyTime: CFG.ceremonyTime && formatTime(CFG.ceremonyTime),
+    receptionTime: CFG.receptionTime && formatTime(CFG.receptionTime),
+    rsvpDeadline: CFG.rsvpDeadline && formatLongDate(CFG.rsvpDeadline),
+    venueName: CFG.venueName,
+    venueNote: CFG.venueNote,
+  };
+
+  Object.entries(values).forEach(([key, val]) => {
+    if (val === undefined || val === null || val === '') return;
+    document.querySelectorAll(`[data-bind="${key}"]`).forEach(el => { el.textContent = val; });
+  });
+
+  // Adresse sur plusieurs lignes
+  if (Array.isArray(CFG.venueAddress)) {
+    document.querySelectorAll('[data-bind="venueAddress"]').forEach(el => {
+      el.textContent = '';
+      CFG.venueAddress.forEach((line, i) => {
+        if (i) el.appendChild(document.createElement('br'));
+        el.appendChild(document.createTextNode(line));
+      });
+    });
+  }
+  if (!CFG.venueNote) document.querySelector('[data-bind="venueNote"]')?.remove();
+
+  const maps = document.getElementById('mapsLink');
+  if (maps) {
+    if (CFG.mapsUrl) maps.href = CFG.mapsUrl; else maps.remove();
+  }
+
+  if (CFG.bride && CFG.groom) {
+    document.title = `${CFG.bride} & ${CFG.groom} — Invitation de mariage`;
   }
 }
 
-/* ---- Countdown ---- */
+/* ---- Écran d'ouverture ---- */
+function initOpener() {
+  const opener = document.getElementById('opener');
+  const btn    = document.getElementById('openerBtn');
+  if (!opener || !btn) { document.body.classList.remove('is-locked'); return; }
+
+  setTimeout(() => btn.focus({ preventScroll: true }), 600);
+
+  btn.addEventListener('click', () => {
+    // Le clic autorise le navigateur à lancer la musique
+    if (typeof MusicController !== 'undefined') MusicController.play();
+
+    opener.classList.add('is-open');
+    document.body.classList.remove('is-locked');
+    document.body.classList.add('is-ready');
+
+    if (typeof ParticleSystem !== 'undefined') {
+      ParticleSystem.burst(window.innerWidth / 2, window.innerHeight / 2, 40);
+    }
+    setTimeout(() => { opener.hidden = true; }, 1200);
+  });
+}
+
+/* ---- Compte à rebours ---- */
+const RING_C = 2 * Math.PI * 34;
+let countdownTimer = null;
+
 function updateCountdown() {
-  const now   = new Date();
-  const diff  = WEDDING_DATE - now;
-
-  const daysEl    = document.getElementById('days');
-  const hoursEl   = document.getElementById('hours');
-  const minutesEl = document.getElementById('minutes');
-  const secondsEl = document.getElementById('seconds');
-
-  if (!daysEl) return;
+  const diff = WEDDING_DATE - new Date();
+  const ids = ['days', 'hours', 'minutes', 'seconds'];
+  if (!document.getElementById('days')) return;
 
   if (diff <= 0) {
-    // Wedding day!
-    ['days','hours','minutes','seconds'].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.textContent = '00';
-    });
-    updateRing('ringDays', 0, 365);
-    updateRing('ringHours', 0, 24);
-    updateRing('ringMinutes', 0, 60);
-    updateRing('ringSeconds', 0, 60);
+    ids.forEach(id => { document.getElementById(id).textContent = '00'; });
+    ['ringDays','ringHours','ringMinutes','ringSeconds'].forEach(id => updateRing(id, 0, 1));
+    const done = document.getElementById('countdownDone');
+    if (done) done.hidden = false;
+    clearInterval(countdownTimer);
     return;
   }
 
@@ -47,279 +125,248 @@ function updateCountdown() {
   const m = Math.floor((diff % 3600000) / 60000);
   const s = Math.floor((diff % 60000) / 1000);
 
-  setCountValue(daysEl, d, 365);
-  setCountValue(hoursEl, h, 24);
-  setCountValue(minutesEl, m, 60);
-  setCountValue(secondsEl, s, 60);
+  setCountValue('days', d);
+  setCountValue('hours', h);
+  setCountValue('minutes', m);
+  setCountValue('seconds', s);
 
-  updateRing('ringDays',    d, 365);
+  updateRing('ringDays',    Math.min(d, 365), 365);
   updateRing('ringHours',   h, 24);
   updateRing('ringMinutes', m, 60);
   updateRing('ringSeconds', s, 60);
 }
 
-function setCountValue(el, val, max) {
-  if (!el) return;
-  const str = val.toString().padStart(2, '0');
-  if (el.textContent !== str) {
+function setCountValue(id, val) {
+  const el = document.getElementById(id);
+  const str = pad(val);
+  if (el && el.textContent !== str) {
     el.textContent = str;
     el.classList.remove('tick');
-    void el.offsetWidth; // reflow
+    void el.offsetWidth;
     el.classList.add('tick');
-    // Remove after animation
-    setTimeout(() => el.classList.remove('tick'), 300);
   }
 }
 
 function updateRing(id, value, max) {
   const ring = document.getElementById(id);
   if (!ring) return;
-  const circumference = 2 * Math.PI * 34; // r=34
-  const progress = value / max;
-  const offset = circumference * (1 - progress);
-  ring.style.strokeDashoffset = offset;
-  ring.style.transition = 'stroke-dashoffset 0.6s cubic-bezier(0.65,0,0.35,1)';
+  ring.style.strokeDasharray = RING_C;
+  ring.style.strokeDashoffset = RING_C * (1 - value / max);
 }
 
-/* ---- Ripple Effect ---- */
-function createRipple(btn, e) {
-  const rippleEl = btn.querySelector('.rsvp-btn__ripple');
-  if (!rippleEl) return;
+/* ---- Ajouter au calendrier (.ics) ---- */
+function initCalendar() {
+  const btn = document.getElementById('calendarBtn');
+  if (!btn) return;
 
-  const rect = btn.getBoundingClientRect();
-  const x = (e.clientX || rect.left + rect.width / 2) - rect.left;
-  const y = (e.clientY || rect.top + rect.height / 2) - rect.top;
+  btn.addEventListener('click', () => {
+    const [y, mo, da] = (CFG.date || '2027-07-17').split('-');
+    const t = s => s.replace(':', '') + '00';
+    const start = `${y}${mo}${da}T${t(CFG.ceremonyTime || '17:00')}`;
+    const end   = `${y}${mo}${da}T${t(CFG.endTime || '23:59')}`;
+    const stamp = new Date().toISOString().replace(/[-:]/g, '').split('.')[0] + 'Z';
+    const esc = s => String(s || '').replace(/([,;\\])/g, '\\$1');
+    const location = [CFG.venueName, ...(CFG.venueAddress || [])].filter(Boolean).join(', ');
 
-  rippleEl.style.left = x + 'px';
-  rippleEl.style.top  = y + 'px';
-  rippleEl.style.width = '0';
-  rippleEl.style.height = '0';
-  rippleEl.style.opacity = '0.5';
-  rippleEl.style.transition = 'none';
+    const ics = [
+      'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Invitation//FR', 'CALSCALE:GREGORIAN',
+      'BEGIN:VEVENT',
+      `UID:mariage-${y}${mo}${da}@invitation`,
+      `DTSTAMP:${stamp}`,
+      `DTSTART:${start}`,
+      `DTEND:${end}`,
+      `SUMMARY:${esc(`Mariage de ${CFG.bride} & ${CFG.groom}`)}`,
+      `LOCATION:${esc(location)}`,
+      `DESCRIPTION:${esc(`Cérémonie à ${formatTime(CFG.ceremonyTime || '17:00')} · Réception à ${formatTime(CFG.receptionTime || '20:00')}`)}`,
+      'BEGIN:VALARM', 'TRIGGER:-P1D', 'ACTION:DISPLAY', 'DESCRIPTION:Mariage demain !', 'END:VALARM',
+      'END:VEVENT', 'END:VCALENDAR'
+    ].join('\r\n');
 
-  requestAnimationFrame(() => {
-    rippleEl.style.transition = 'all 0.6s cubic-bezier(0.19,1,0.22,1)';
-    rippleEl.style.width  = '300px';
-    rippleEl.style.height = '300px';
-    rippleEl.style.marginLeft = '-150px';
-    rippleEl.style.marginTop  = '-150px';
-    rippleEl.style.opacity = '0';
+    const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `mariage-${(CFG.bride || 'H').toLowerCase()}-${(CFG.groom || 'H').toLowerCase()}.ics`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
   });
 }
 
-/* ---- RSVP Form ---- */
+/* ---- Effet d'onde sur les boutons ---- */
+function createRipple(btn, e) {
+  const rippleEl = btn.querySelector('.rsvp-btn__ripple');
+  if (!rippleEl) return;
+  const rect = btn.getBoundingClientRect();
+  const x = (e && e.clientX ? e.clientX : rect.left + rect.width / 2) - rect.left;
+  const y = (e && e.clientY ? e.clientY : rect.top + rect.height / 2) - rect.top;
+
+  rippleEl.style.transition = 'none';
+  rippleEl.style.left = x + 'px';
+  rippleEl.style.top  = y + 'px';
+  rippleEl.style.width = rippleEl.style.height = '0';
+  rippleEl.style.opacity = '0.5';
+
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    rippleEl.style.transition = 'all 0.6s cubic-bezier(0.19,1,0.22,1)';
+    rippleEl.style.width = rippleEl.style.height = '320px';
+    rippleEl.style.opacity = '0';
+  }));
+}
+
+/* ---- RSVP → WhatsApp ---- */
 function initRSVP() {
-  const btn    = document.getElementById('rsvpBtn');
-  const modal  = document.getElementById('rsvpModal');
-  const close  = document.getElementById('modalClose');
+  const form    = document.getElementById('rsvpForm');
+  const btn     = document.getElementById('rsvpBtn');
+  const modal   = document.getElementById('rsvpModal');
+  const close   = document.getElementById('modalClose');
   const overlay = document.getElementById('modalOverlay');
+  const msgEl   = document.getElementById('modalMessage');
+  const waLink  = document.getElementById('modalWa');
+  const guestsField = document.getElementById('guestsField');
+  const nameInput   = document.getElementById('rsvpName');
+  const nameError   = document.getElementById('nameError');
+  if (!form || !modal) return;
 
-  if (!btn || !modal) return;
+  // Masquer « nombre de personnes » si l'invité ne vient pas
+  form.querySelectorAll('input[name="attending"]').forEach(r => {
+    r.addEventListener('change', () => {
+      const yes = form.attending.value === 'yes';
+      guestsField.classList.toggle('is-hidden', !yes);
+      btn.querySelector('.rsvp-btn__text').textContent = 'Envoyer ma réponse';
+    });
+  });
 
-  btn.addEventListener('click', (e) => {
-    createRipple(btn, e);
+  nameInput.addEventListener('input', () => {
+    nameError.hidden = true;
+    nameInput.removeAttribute('aria-invalid');
+  });
 
-    const nameInput   = document.getElementById('rsvpName');
-    const guestsInput = document.getElementById('rsvpGuests');
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    createRipple(btn, null);
 
-    const name   = nameInput?.value.trim();
-    const guests = guestsInput?.value;
-
+    const name = nameInput.value.trim();
     if (!name) {
+      nameError.hidden = false;
+      nameInput.setAttribute('aria-invalid', 'true');
       shakeField(nameInput);
       return;
     }
 
-    // Success
-    setTimeout(() => {
-      modal.hidden = false;
-      modal.removeAttribute('hidden');
-      modal.setAttribute('aria-hidden', 'false');
+    const attending = form.attending.value === 'yes';
+    const guests = form.guests.value;
+    const note = form.message.value.trim();
+    const couple = `${CFG.bride} & ${CFG.groom}`;
 
-      // Particle burst
-      if (typeof ParticleSystem !== 'undefined') {
-        const rect = btn.getBoundingClientRect();
-        ParticleSystem.burst(rect.left + rect.width / 2, rect.top + rect.height / 2, 30);
-      }
+    let text = attending
+      ? `Bonjour ${couple} 🤍\nJe confirme ma présence à votre mariage.\n\n👤 Nom : ${name}\n👥 Nombre de personnes : ${guests}`
+      : `Bonjour ${couple} 🤍\nMalheureusement je ne pourrai pas être présent(e) à votre mariage.\n\n👤 Nom : ${name}`;
+    if (note) text += `\n💬 Message : ${note}`;
 
-      // Focus modal
-      setTimeout(() => close?.focus(), 100);
-    }, 400);
+    const number = String(CFG.whatsapp || '').replace(/\D/g, '');
+    const waUrl = `https://wa.me/${number}?text=${encodeURIComponent(text)}`;
+
+    msgEl.innerHTML = attending
+      ? 'Nous avons hâte de vous voir&nbsp;!<br/>Appuyez ci-dessous pour envoyer votre réponse.'
+      : 'Merci de nous prévenir,<br/>vous serez dans nos pensées.';
+    waLink.href = waUrl;
+
+    openModal(modal, waLink);
+    if (attending && typeof ParticleSystem !== 'undefined') {
+      const rect = btn.getBoundingClientRect();
+      ParticleSystem.burst(rect.left + rect.width / 2, rect.top + rect.height / 2, 30);
+    }
+
   });
 
-  // Close
-  [close, overlay].forEach(el => {
-    if (!el) return;
-    el.addEventListener('click', () => closeModal(modal));
-  });
-
-  // Escape key
+  [close, overlay].forEach(el => el && el.addEventListener('click', () => closeModal(modal)));
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && !modal.hidden) closeModal(modal);
   });
 }
 
+function openModal(modal, focusEl) {
+  modal.hidden = false;
+  setTimeout(() => focusEl?.focus(), 100);
+}
+
 function closeModal(modal) {
   modal.hidden = true;
-  modal.setAttribute('aria-hidden', 'true');
-  // Return focus
   document.getElementById('rsvpBtn')?.focus();
 }
 
 function shakeField(input) {
-  if (!input) return;
-  input.style.animation = 'none';
+  input.classList.remove('shake');
   void input.offsetWidth;
-  input.style.animation = 'shake 0.4s cubic-bezier(0.36,0.07,0.19,0.97)';
+  input.classList.add('shake');
   input.focus();
-  setTimeout(() => { input.style.animation = ''; }, 500);
 }
 
-/* ---- Scroll CTA ---- */
+/* ---- Bouton « Découvrir » ---- */
 function initScrollCTA() {
-  const cta = document.getElementById('scrollCta');
-  if (!cta) return;
-
-  cta.addEventListener('click', () => {
-    const scene2 = document.getElementById('scene2');
-    if (scene2) {
-      scene2.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+  document.getElementById('scrollCta')?.addEventListener('click', () => {
+    document.getElementById('scene2')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 }
 
-/* ---- Keyboard Navigation ---- */
+/* ---- Navigation clavier (hors champs de formulaire) ---- */
 function initKeyboardNav() {
   document.addEventListener('keydown', (e) => {
+    const tag = (e.target.tagName || '').toLowerCase();
+    if (['input', 'textarea', 'select', 'button'].includes(tag)) return;
+    if (document.body.classList.contains('is-locked')) return;
+
     const scenes = [...document.querySelectorAll('.scene')];
-    const currentIdx = scenes.findIndex(s => {
-      const rect = s.getBoundingClientRect();
-      return rect.top <= 100 && rect.bottom > 100;
+    const idx = scenes.findIndex(s => {
+      const r = s.getBoundingClientRect();
+      return r.top <= 100 && r.bottom > 100;
     });
 
-    if (e.key === 'ArrowDown' || e.key === 'PageDown') {
-      e.preventDefault();
-      const next = scenes[currentIdx + 1];
-      if (next) next.scrollIntoView({ behavior: 'smooth' });
-    } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
-      e.preventDefault();
-      const prev = scenes[currentIdx - 1];
-      if (prev) prev.scrollIntoView({ behavior: 'smooth' });
-    } else if (e.key === 'Home') {
-      scenes[0]?.scrollIntoView({ behavior: 'smooth' });
-    } else if (e.key === 'End') {
-      scenes[scenes.length - 1]?.scrollIntoView({ behavior: 'smooth' });
-    }
+    let target = null;
+    if (e.key === 'ArrowDown' || e.key === 'PageDown') target = scenes[idx + 1];
+    else if (e.key === 'ArrowUp' || e.key === 'PageUp') target = scenes[idx - 1];
+    else if (e.key === 'Home') target = scenes[0];
+    else if (e.key === 'End') target = scenes[scenes.length - 1];
+
+    if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); }
   });
 }
 
-/* ---- Cursor sparkle trail ---- */
+/* ---- Traînée scintillante du curseur (ordinateur uniquement) ---- */
 function initCursorTrail() {
-  // Skip on touch devices
-  if ('ontouchstart' in window) return;
-
+  if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
   document.addEventListener('mousemove', (e) => {
-    if (Math.random() > 0.85) { // throttle
-      if (typeof ParticleSystem !== 'undefined') {
-        ParticleSystem.burst(e.clientX, e.clientY, 1);
-      }
+    if (Math.random() > 0.88 && typeof ParticleSystem !== 'undefined') {
+      ParticleSystem.burst(e.clientX, e.clientY, 1);
     }
   }, { passive: true });
 }
 
-/* ---- Lazy reveal via IntersectionObserver (fallback enhancement) ---- */
-function initLazyReveal() {
-  if (!('IntersectionObserver' in window)) {
-    document.querySelectorAll('.reveal-text').forEach(el => {
-      el.classList.add('visible');
-    });
-    return;
-  }
-
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const delay = parseFloat(entry.target.dataset.delay || 0);
-        setTimeout(() => {
-          entry.target.classList.add('visible');
-        }, delay * 1000);
-        io.unobserve(entry.target);
-      }
-    });
-  }, { threshold: 0.15 });
-
-  // Observe all reveal targets that aren't inside a scene handler
-  document.querySelectorAll('.reveal-text').forEach(el => io.observe(el));
-}
-
-/* ---- Shake animation (for form validation) ---- */
-const shakeStyle = document.createElement('style');
-shakeStyle.textContent = `
-  @keyframes shake {
-    0%,100% { transform: translateX(0); }
-    20%  { transform: translateX(-8px); }
-    40%  { transform: translateX(8px); }
-    60%  { transform: translateX(-6px); }
-    80%  { transform: translateX(6px); }
-  }
-  .tick {
-    animation: countdownTick 0.3s cubic-bezier(0.34,1.56,0.64,1);
-  }
-`;
-document.head.appendChild(shakeStyle);
-
-/* ---- Performance: visibility API ---- */
+/* ---- Pause des animations quand l'onglet est caché ---- */
 function initVisibilityOptimize() {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   document.addEventListener('visibilitychange', () => {
-    if (document.hidden) {
-      ParticleSystem?.stop?.();
-    } else {
-      ParticleSystem?.start?.();
-    }
+    if (typeof ParticleSystem === 'undefined') return;
+    if (document.hidden) ParticleSystem.stop(); else ParticleSystem.start();
   });
 }
 
-/* ---- Main Init ---- */
-ready(() => {
-
-  // 1. Timeline (scenes + observer + parallax)
+/* ---- Init ---- */
+document.addEventListener('DOMContentLoaded', () => {
+  bindContent();
+  if (typeof MusicController !== 'undefined') MusicController.init();
+  initOpener();
   if (typeof Timeline !== 'undefined') Timeline.init();
 
-  // 2. Music
-  if (typeof MusicController !== 'undefined') MusicController.init();
-
-  // 3. Countdown
   updateCountdown();
-  setInterval(updateCountdown, 1000);
+  countdownTimer = setInterval(updateCountdown, 1000);
 
-  // 4. RSVP
+  initCalendar();
   initRSVP();
-
-  // 5. Scroll CTA
   initScrollCTA();
-
-  // 6. Keyboard nav
   initKeyboardNav();
-
-  // 7. Lazy reveal
-  initLazyReveal();
-
-  // 8. Cursor trail (desktop)
   initCursorTrail();
-
-  // 9. Performance
   initVisibilityOptimize();
-
-  // 10. Smooth scroll polyfill for older browsers
-  if (!CSS.supports('scroll-behavior', 'smooth')) {
-    document.querySelectorAll('a[href^="#"]').forEach(a => {
-      a.addEventListener('click', e => {
-        e.preventDefault();
-        const target = document.querySelector(a.getAttribute('href'));
-        if (target) {
-          target.scrollIntoView({ behavior: 'smooth' });
-        }
-      });
-    });
-  }
 });
